@@ -1,0 +1,34 @@
+{
+  "name": "purescript-firestore",
+  "version": "1.0.0",
+  "description": "Firestore Purescript Library",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "pulp build",
+    "test": "pulp test",
+    "autotest": "pulp -w test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realkinetic/purescript-firestore.git"
+  },
+  "author": "Real Kinetic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/realkinetic/purescript-firestore/issues"
+  },
+  "homepage": "https://github.com/realkinetic/purescript-firestore#readme",
+  "dependencies": {
+    "firebase": "4.5.0"
+  },
+  "devDependencies": {
+    "bower": "1.8.2",
+    "firebase-server": "0.11.0",
+    "pulp": "12.0.1",
+    "purescript": "0.11.6"
+  }
+}
