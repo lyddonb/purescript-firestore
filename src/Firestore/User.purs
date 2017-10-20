@@ -1,37 +1,44 @@
 module Firestore.User where
 
-import Data.Generic (class Generic, gShow)
-import Data.Maybe (Maybe)
+import Data.Foreign.NullOrUndefined (NullOrUndefined)
+import Data.Generic.Rep as Rep
+import Data.Generic.Rep.Show (genericShow)
+import Data.Newtype (class Newtype)
+import Simple.JSON (class ReadForeign)
 import Prelude (class Eq, class Show)
 
 newtype UserInfo = UserInfo
-  { displayName :: Maybe String
-  , email :: Maybe String
-  , phoneNumber :: Maybe String
-  , photoURL :: Maybe String
+  { displayName :: NullOrUndefined String
+  , email :: NullOrUndefined String
+  , phoneNumber :: NullOrUndefined String
+  , photoURL :: NullOrUndefined String
   , providerId :: String
   , uid :: String
   }
 
-derive instance genericUserInfo :: Generic UserInfo
+derive instance newtypeUserInfo :: Newtype UserInfo _
+derive newtype instance rfUserInfo :: ReadForeign UserInfo
+derive instance repGenericUserInfo :: Rep.Generic UserInfo _
 derive instance eqUserInfo :: Eq UserInfo
 instance showUserInfo :: Show UserInfo where
-    show = gShow
+  show = genericShow
 
 newtype User = User
-  { displayName :: Maybe String
-  , email :: Maybe String
+  { displayName :: NullOrUndefined String
+  , email :: NullOrUndefined String
   , emailVerified :: Boolean
   , isAnonymous :: Boolean
-  , phoneNumber :: Maybe String
-  , photoURL :: Maybe String
+  , phoneNumber :: NullOrUndefined String
+  , photoURL :: NullOrUndefined String
   , providerData :: Array UserInfo
   , providerId :: String
   , refreshToken :: String
   , uid :: String
   }
 
-derive instance genericUser :: Generic User
+derive instance newtypeUser :: Newtype User _
+derive newtype instance rfUser :: ReadForeign User
+derive instance repGenericUser :: Rep.Generic User _
 derive instance eqUser :: Eq User
 instance showUser :: Show User where
-    show = gShow
+  show = genericShow

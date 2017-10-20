@@ -7,3 +7,7 @@ require("firebase/firestore");
 exports.initializeAuthImpl = function() {
   return firebase.auth();
 };
+
+exports.signInWithEmailAndPasswordImpl = function(auth, email, password) {
+  return auth.signInWithEmailAndPassword(email, password);
+};

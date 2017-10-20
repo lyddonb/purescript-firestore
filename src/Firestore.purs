@@ -2,7 +2,7 @@ module Firestore where
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1)
-import Firestore.Types (FIRESTORE, Application(..), Firestore(..), FirestoreConfig)
+import Firestore.Types (FIRESTORE, Application(Application), Firestore, FirestoreConfig)
 import Data.Newtype (class Newtype, unwrap)
 
 

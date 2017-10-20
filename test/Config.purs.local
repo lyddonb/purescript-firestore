@@ -1,0 +1,19 @@
+module Test.Config where
+
+import Firestore.Types (FirestoreConfig(FirestoreConfig))
+
+firestoreConfig :: FirestoreConfig
+firestoreConfig = FirestoreConfig
+	{ apiKey: "insert_a_key"
+  , authDomain: "insert_domain.firebaseapp.com"
+  , databaseURL: "https://insert_database.firebaseio.com"
+  , projectId: "insert_project_id"
+  , storageBucket: "insert_appspot.appspot.com"
+  , messagingSenderId: "insert_sender_id"
+  }
+
+email :: String
+email = "insert@email.com"
+
+password :: String
+password = "insert_password"
