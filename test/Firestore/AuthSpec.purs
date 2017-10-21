@@ -11,10 +11,9 @@ import Firestore (getApp, getAppConfig)
 import Firestore.Auth (Email(Email), Password(Password), initializeAuth, signInWithEmailAndPassword)
 import Firestore.Types (FIRESTORE)
 import Firestore.User (User(User))
-import Test.Data (testConfig)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (fail, shouldEqual)
-import Test.Config (email, password)
+import Test.Config (firestoreConfig, email, password)
 
 
 shouldEqualWithText :: forall r t. Show t => Eq t => String -> t -> t -> Aff r Unit
@@ -36,7 +35,7 @@ spec =
   describe "Firestore auth tests" do
     describe "Initialize auth" do 
        it "returns an Auth" do
-         let c = testConfig
+         let c = firestoreConfig
          a <- liftEff $ initializeAuth 
          (getAppConfig $ getApp a) `shouldEqual` c
     describe "Sign in with email and password" do 
