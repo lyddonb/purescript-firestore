@@ -4,18 +4,25 @@ import Data.Generic.Rep as Rep
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Except (runExcept)
+import Control.Monad.State.Trans (StateT)
+import Control.Monad.Trans.Class (lift)
 import Control.Promise (toAff, Promise)
 import Data.Either (Either, hush)
 import Data.Foreign (Foreign, MultipleErrors)
 import Data.Foreign.NullOrUndefined (NullOrUndefined)
 import Data.Function.Uncurried (Fn3, runFn3)
 import Data.Generic.Rep.Show (genericShow)
+import Data.Lens (Getter, use)
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype)
 import Firestore.Types (FIRESTORE, Application)
 import Firestore.User (User)
 import Prelude (class Eq, class Show, bind, pure, ($), (<$>))
 import Simple.JSON (class ReadForeign, read)
+
+
+class HasAuthentication s where
+  _authentication :: Getter s s Auth Auth
 
 
 newtype Auth = Auth
@@ -52,14 +59,16 @@ initializeAuth = initializeAuthImpl
 
 -- | Sign in with an email and password
 signInWithEmailAndPassword'
-  :: forall eff . 
-   Auth -> Email -> Password -> Aff (firestore :: FIRESTORE | eff) (Either MultipleErrors User)
-signInWithEmailAndPassword' a (Email em) (Password pwd) = do
-  res <- toAff $ runFn3 signInWithEmailAndPasswordImpl a em pwd
+  :: forall s eff . HasAuthentication s =>
+   Email -> Password -> StateT s (Aff (firestore :: FIRESTORE | eff)) (Either MultipleErrors User)
+signInWithEmailAndPassword' (Email em) (Password pwd) = do
+  a <- use _authentication
+  res <- lift $ toAff $ runFn3 signInWithEmailAndPasswordImpl a em pwd
   pure $ runExcept $ read res
 
 -- | Sign in with an email and password
 signInWithEmailAndPassword
-  :: forall eff . 
-   Auth -> Email -> Password -> Aff (firestore :: FIRESTORE | eff) (Maybe User)
-signInWithEmailAndPassword a e p = hush <$> signInWithEmailAndPassword' a e p
+  :: forall s eff . HasAuthentication s =>
+   Email -> Password -> StateT s (Aff (firestore :: FIRESTORE | eff)) (Maybe User)
+signInWithEmailAndPassword e p = do
+  hush <$> signInWithEmailAndPassword' e p

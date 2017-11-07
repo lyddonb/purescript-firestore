@@ -14,7 +14,8 @@
     "purescript-aff-promise": "^1.0.0",
     "purescript-foreign-generic": "^5.0.0",
     "purescript-generics-rep": "^5.3.0",
-    "purescript-simple-json": "^1.0.0"
+    "purescript-simple-json": "^1.0.0",
+    "purescript-profunctor-lenses": "^3.7.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0",

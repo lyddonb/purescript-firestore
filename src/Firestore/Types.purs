@@ -4,12 +4,21 @@ import Control.Monad.Eff (kind Effect)
 import Data.Generic (class Generic)
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Show (genericShow)
+import Data.Lens (Getter)
 import Data.Newtype (class Newtype)
 import Simple.JSON (class ReadForeign)
 import Prelude (class Eq, class Show)
 
 -- | The effect associated with using the Firestore module
 foreign import data FIRESTORE :: Effect
+
+class HasApplication s where
+  _application :: Getter s s Application Application
+
+
+class HasFirestore s where
+  _firestore :: Getter s s Firestore Firestore
+
 
 newtype FirestoreConfig = FirestoreConfig
   { apiKey :: String

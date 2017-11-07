@@ -5,10 +5,12 @@ import Prelude
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (CONSOLE)
+import Control.Monad.State.Trans (StateT, evalStateT)
 import Data.Foreign.NullOrUndefined (NullOrUndefined(NullOrUndefined))
 import Data.Maybe (Maybe(..))
-import Firestore (getApp, getAppConfig)
-import Firestore.Auth (Email(Email), Password(Password), initializeAuth, signInWithEmailAndPassword)
+import Firestore (getApp, getAppConfig, getCurrentApp)
+import Firestore.Auth (class HasAuthentication, Email(Email), Password(Password), initializeAuth, signInWithEmailAndPassword)
+import Firestore.Context (AuthdContext(AuthdContext))
 import Firestore.Types (FIRESTORE)
 import Firestore.User (User(User))
 import Test.Spec (Spec, describe, it)
@@ -40,6 +42,13 @@ spec =
          (getAppConfig $ getApp a) `shouldEqual` c
     describe "Sign in with email and password" do 
       it "returns a logged in user" do
+         app <- liftEff $ getCurrentApp 
          a <- liftEff $ initializeAuth 
-         result <- signInWithEmailAndPassword a (Email email) (Password password)
+         let ctx = AuthdContext { application: app, auth: a }
+         result <- evalStateT signInTest ctx
          verifyUser result
+
+signInTest
+  :: forall s eff . HasAuthentication s =>
+   StateT s (Aff (firestore :: FIRESTORE | eff)) (Maybe User)
+signInTest = signInWithEmailAndPassword (Email email) (Password password)
